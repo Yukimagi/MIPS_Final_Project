@@ -41,7 +41,7 @@
 * WB_MemtoReg 判斷寫入ReadData還是WB_Result
 * 最後設置 STOP_WB 狀態
 #### 下圖是簡單的流程圖:
-### ![](./Flowchart.png)
+### ![](./flowchart.jpg)
 
 # How to run
 ### 你可以下載下來後，到mips的資料夾中(要將cmd導入到此資料夾)
