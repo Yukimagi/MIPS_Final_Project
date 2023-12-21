@@ -8,9 +8,6 @@
 ### Thread model: win32
 ### gcc version 6.3.0 (MinGW.org GCC-6.3.0-1)
 ## Include的套件(基本上不需要額外裝)
-* include <iostream>
-* include <fstream>
-* include <string>
 
 # 關於本程式的class
 ### Header.h
