@@ -8,9 +8,9 @@
 ### Thread model: win32
 ### gcc version 6.3.0 (MinGW.org GCC-6.3.0-1)
 ## Include的套件(基本上不需要額外裝)
-#### include <iostream>
-### include <fstream>
-### include <string>
+* include <iostream>
+* include <fstream>
+* include <string>
 
 # 關於本程式的class
 ### Header.h
@@ -62,5 +62,5 @@ g++ -o main Header.o IF.o ID.o EX.o MEM.o WB.o main.o
 ```
 
 
-# 執行結果中cmd事我們寫程式時的debug內容，相對應的輸出會於result.txt
+### 執行結果中cmd事我們寫程式時的debug內容，相對應的輸出會於result.txt
 
