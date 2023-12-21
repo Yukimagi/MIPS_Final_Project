@@ -28,17 +28,17 @@
 *此階段也有需要針對stall、forwarding判斷
 *只要有進行此stage會印出此stage到result.txt，
 *，另外結束後傳值給EX stage)
-### EX.cpp->
+### EX.cpp
 *執行EX階段應完成的事項
 *(做到運算，並提供forwarding等...功能，branch指令結束後的判斷等等...
 *只要有進行此stage會印出此stage到result.txt，
 *，另外結束後傳直給MEM stage)
-### MEM.cpp->
+### MEM.cpp
 *執行IF階段應完成的事項
 *MEM_Mem_Read 判斷要不要將memory的內容傳給ReadData
 *MEM_Mem_Write 判斷要不要將register的內容傳給memory
 *傳值給WB，另外結束後傳直給WB stage)
-### WB.cpp->
+### WB.cpp
 *執行IF階段應完成的事項
 *WB_Reg_Write 判斷要不要將資料寫回register
 *WB_MemtoReg 判斷寫入ReadData還是WB_Result
@@ -46,70 +46,21 @@
 #### 下圖是簡單的流程圖:
 ### ![](./Flowchart.png)
 
-# Run Code
-
-## Clone Repository and Use gcc Compile
+# How to run
+###你可以下載下來後，到mips的資料夾中(要將cmd導入到此資料夾)
+###接著寫入以下於cmd使產生exe檔
+###當產生exe檔後將要操作的題目依照以下指示:
+*在執行程式碼之前，請記得先將要測試的題目複製到memory.txt中，須注意由於我們的程是碼會判斷格式，所以需要依照我們提供的程式碼的格式進行輸入，如果有跑錯，可能會是你的格式有誤
+*(memory1.txt對應ppt第一題，以此類推...)
+*(在cmd可直接輸入main)
+*(ppt輸出格式會於result.txt)
 ```bash
-git clone https://github.com/Yui-Arthur/MIPS_cpu_pipeline_simulate.git
-cd MIPS_cpu_pipeline_simulate
-g++ main.cpp pipeline_CPU_simulator.cpp -o main
-```
+g++ -c Header.cpp IF.cpp ID.cpp EX.cpp MEM.cpp WB.cpp main.cpp
+g++ -o main Header.o IF.o ID.o EX.o MEM.o WB.o main.o
 
-## Use File as Input
-
+./main
 ```bash
-./main ${FilePath}
-# Example
-./main sample_input/input1.txt
-# Muti File Example
-./main sample_input/input1.txt sample_input/input2.txt
-# Output file 
-./main ${FilePath} > ${Outputfile}
-```
-or
 
-```bash
-./main < ${FilePath}
-# Example
-./main < sample_input/input1.txt
-# Output file 
-./main < ${FilePath} > ${Outputfile}
-```
 
-## Use Stdin as Input
+# 執行結果中cmd事我們寫程式時的debug內容，相對應的輸出會於result.txt
 
-```bash
-./main 
-# input Mips Asm Code
-# Ex. lw $2, 8($0)
-```
-
-# Output Format
-### Show current PC and cycles then print the pipeline register (IF_ID , ID_EX , EX_MEM , MEM_WB) before this cycle 
-### ![](./example_output.png)
-## Stage 
-* IF - next instruction into IF Stage
-* ID - IF_ID into ID Stage
-* EX - ID_EX into EX Stage
-* MEM - EX_MEM into MEM Stage
-* WB - MEM_WB into WB Stage
-
-## Signal and Value
-* Opcode: instruction that specifies the operation to be performed
-* Stage : IF, ID, EX, MEM, WB
-* RegDst : selects the destination register (rt or rd)
-* ALUSrc : selects the ALU input (rt or offset / addr)
-* Branch : the operation is branch or not
-* MemRead : the operation will read memory
-* MemWrite : the operation will write memory
-* RegWrite : the operation will write register
-* MemtoReg : selects the source value for the register write (memReadValue or ALUresult)
-* rs : source register
-* rt : target register
-* rd : destination register
-* reg1 : rs register value
-* reg2 : rt register value
-* Addr/Offset : the offset of memory or the PC relative addr
-* ALUresult : the value of ALU result
-* ReadmemValue : the value of memory read
-* RegWriteValue : the value of register write
