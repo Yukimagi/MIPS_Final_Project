@@ -13,29 +13,36 @@
 ### include <string>
 
 # 關於本程式的class
-### Header.h->你可以於此程式中看到全部的變數(我們用extern的方法，使我們可以共用變數)，並且基本定義我們會用到的IF、ID、EX、MEM、WB函式
-### Header.cpp->我們在這個程式中定義了初始化變數的函式
-### IF.cpp->執行IF階段應完成的事項
-####         (讀入指令，並存放到變數，其中有可能需要stall
-####          只要有進行此stage會印出此stage到result.txt，
-####          (ex:branch的predict not taken)，另外結束後傳值給ID stage)
-### ID.cpp->執行ID階段應完成的事項
-####         (執行decode instruction，判斷指令，並賦予對應的opcode，
-####          此階段也有需要針對stall、forwarding判斷
-####          只要有進行此stage會印出此stage到result.txt，
-####          ，另外結束後傳值給EX stage)
-### EX.cpp->執行EX階段應完成的事項
-####         (做到運算，並提供forwarding等...功能，branch指令結束後的判斷等等...
-####          只要有進行此stage會印出此stage到result.txt，
-####          ，另外結束後傳直給MEM stage)
-### MEM.cpp->執行IF階段應完成的事項
-####          MEM_Mem_Read 判斷要不要將memory的內容傳給ReadData
-####          MEM_Mem_Write 判斷要不要將register的內容傳給memory
-####          傳值給WB，另外結束後傳直給WB stage)
-### WB.cpp->執行IF階段應完成的事項
-####          WB_Reg_Write 判斷要不要將資料寫回register
-####          WB_MemtoReg 判斷寫入ReadData還是WB_Result
-####          最後設置 STOP_WB 狀態
+### Header.h
+*你可以於此程式中看到全部的變數(我們用extern的方法，使我們可以共用變數)，並且基本定義我們會用到的IF、ID、EX、MEM、WB函式
+### Header.cpp
+*我們在這個程式中定義了初始化變數的函式
+### IF.cpp
+*執行IF階段應完成的事項
+*(讀入指令，並存放到變數，其中有可能需要stall
+*只要有進行此stage會印出此stage到result.txt，
+*(ex:branch的predict not taken)，另外結束後傳值給ID stage)
+### ID.cpp
+*執行ID階段應完成的事項
+*(執行decode instruction，判斷指令，並賦予對應的opcode，
+*此階段也有需要針對stall、forwarding判斷
+*只要有進行此stage會印出此stage到result.txt，
+*，另外結束後傳值給EX stage)
+### EX.cpp->
+*執行EX階段應完成的事項
+*(做到運算，並提供forwarding等...功能，branch指令結束後的判斷等等...
+*只要有進行此stage會印出此stage到result.txt，
+*，另外結束後傳直給MEM stage)
+### MEM.cpp->
+*執行IF階段應完成的事項
+*MEM_Mem_Read 判斷要不要將memory的內容傳給ReadData
+*MEM_Mem_Write 判斷要不要將register的內容傳給memory
+*傳值給WB，另外結束後傳直給WB stage)
+### WB.cpp->
+*執行IF階段應完成的事項
+*WB_Reg_Write 判斷要不要將資料寫回register
+*WB_MemtoReg 判斷寫入ReadData還是WB_Result
+*最後設置 STOP_WB 狀態
 #### 下圖是簡單的流程圖:
 ### ![](./Flowchart.png)
 
