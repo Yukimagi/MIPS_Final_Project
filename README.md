@@ -1,16 +1,16 @@
 # MIPS 期末專題(Forwarding+Branch Predict Not Taken) 
-##程式語言:C++/編譯器版本
-###Using built-in specs.
-###COLLECT_GCC=g++
-###COLLECT_LTO_WRAPPER=c:/mingw/bin/../libexec/gcc/mingw32/6.3.0/lto-wrapper.exe
-###Target: mingw32
-###Configured with: ../src/gcc-6.3.0/configure --build=x86_64-pc-linux-gnu --host=mingw32 --with-gmp=/mingw --with-mpfr=/mingw --with-mpc=/mingw --with-isl=/mingw --prefix=/mingw --disable-win32-registry --target=mingw32 --with-arch=i586 --enable-languages=c,c++,objc,obj-c++,fortran,ada --with-pkgversion='MinGW.org GCC-6.3.0-1' --enable-static --enable-shared --enable-threads --with-dwarf2 --disable-sjlj-exceptions --enable-version-specific-runtime-libs --with-libiconv-prefix=/mingw --with-libintl-prefix=/mingw --enable-libstdcxx-debug --with-tune=generic --enable-libgomp --disable-libvtv --enable-nls
-###Thread model: win32
-###gcc version 6.3.0 (MinGW.org GCC-6.3.0-1)
-##Include的套件(基本上不需要額外裝)
-####include <iostream>
-###include <fstream>
-###include <string>
+## 程式語言:C++/編譯器版本
+### Using built-in specs.
+### COLLECT_GCC=g++
+### COLLECT_LTO_WRAPPER=c:/mingw/bin/../libexec/gcc/mingw32/6.3.0/lto-wrapper.exe
+### Target: mingw32
+### Configured with: ../src/gcc-6.3.0/configure --build=x86_64-pc-linux-gnu --host=mingw32 --with-gmp=/mingw --with-mpfr=/mingw --with- mpc=/mingw --with-isl=/mingw --prefix=/mingw --disable-win32-registry --target=mingw32 --with-arch=i586 --enable-languages=c,c++,objc,obj-c++,fortran,ada --with-pkgversion='MinGW.org GCC-6.3.0-1' --enable-static --enable-shared --enable-threads --with-dwarf2 --disable-sjlj-exceptions --enable-version-specific-runtime-libs --with-libiconv-prefix=/mingw --with-libintl-prefix=/mingw --enable-libstdcxx-debug --with-tune=generic --enable-libgomp --disable-libvtv --enable-nls
+### Thread model: win32
+### gcc version 6.3.0 (MinGW.org GCC-6.3.0-1)
+## Include的套件(基本上不需要額外裝)
+#### include <iostream>
+### include <fstream>
+### include <string>
 
 # 關於本程式的class
 ### Header.h->你可以於此程式中看到全部的變數(我們用extern的方法，使我們可以共用變數)，並且基本定義我們會用到的IF、ID、EX、MEM、WB函式
