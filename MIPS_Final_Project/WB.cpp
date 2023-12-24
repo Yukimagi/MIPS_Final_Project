@@ -19,7 +19,7 @@ void SetWBStage() {
 }
 
 void WB() {
-    cout << "________________________WB stage____________________" << endl;
+    cout << "________________________WB stage START____________________" << endl;
     // ¿é¥X¦Ü"result.txt"
     if (pipeline.INSCYCLE[4][0] != '0') {
         fstream out;
@@ -60,5 +60,5 @@ void WB() {
 
     //WBµ²§ô
     pipeline.STOP_WB = true;
-    cout << "________________________WB stage____________________" << endl;
+    cout << "________________________WB stage END____________________" << endl;
 }

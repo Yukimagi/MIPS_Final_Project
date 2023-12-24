@@ -30,7 +30,7 @@ void SetMEMStage() {
 }
 
 void MEM() {
-    cout << "________________________MEM stage____________________" << endl;
+    cout << "________________________MEM stage START____________________" << endl;
     // ¿é¥X¦Ü"result.txt"
     if (pipeline.INSCYCLE[3][0] != '0') {
         fstream out;
@@ -88,5 +88,5 @@ void MEM() {
     //MEMµ²§ô,´«WB
     pipeline.STOP_MEM = true;
     pipeline.STOP_WB = false;
-    cout << "________________________MEM stage____________________" << endl;
+    cout << "________________________MEM stage END____________________" << endl;
 }
