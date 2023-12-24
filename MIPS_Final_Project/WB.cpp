@@ -19,12 +19,17 @@ void SetWBStage() {
 }
 
 void WB() {
+    cout << "________________________WB stage____________________" << endl;
     // 輸出至"result.txt"
     if (pipeline.INSCYCLE[4][0] != '0') {
         fstream out;
+        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
         out.open("result.txt", ios::out | ios::app);
+
         out << "    " << pipeline.INSCYCLE[4] << ":WB ";
+
         out << pipeline.WB_Reg_Write;
+
         if (pipeline.WB_MemtoReg == 2) {
             out << 'X' << endl;
         }
@@ -33,7 +38,7 @@ void WB() {
         }
 
         for (int i = 0; i < 4; i++) {
-            pipeline.INSCYCLE[4][i] = '0';
+            pipeline.INSCYCLE[4][i] = '0';//設為空
         }
         out.close();
     }
@@ -55,4 +60,5 @@ void WB() {
 
     //WB結束
     pipeline.STOP_WB = true;
+    cout << "________________________WB stage____________________" << endl;
 }

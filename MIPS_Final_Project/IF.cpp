@@ -20,15 +20,20 @@ void ReadInst(fstream& input) {
     string instemp = pipeline.instruction;
     bool nextline = false;// nextline 用來判斷本次讀取有沒有指令 有:PC+4 無:原PC
     for (int i = 0; i <= pipeline.line; i++) {
+
         if (getline(input, pipeline.instruction)) {
+
             if (i == pipeline.line) {
+
                 nextline = true;
-                for (int i = 0; i < 3; i++)
-                {
+
+                for (int i = 0; i < 3; i++){
+
                     pipeline.INSCYCLE[0][i] = pipeline.instruction[i];//傳個別指令進來
                 }
-                pipeline.INSCYCLE[0][3] = '\0';
+                pipeline.INSCYCLE[0][3] = '\0';//設定空字符表示最後一個終結(以幫助後續判斷)
                 fstream out;
+                //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
                 out.open("result.txt", std::ios::out | std::ios::app);
                 out << "	" << pipeline.INSCYCLE[0] << ":IF" << std::endl;
                 out.close();

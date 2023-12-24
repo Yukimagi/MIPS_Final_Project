@@ -30,12 +30,17 @@ void SetMEMStage() {
 }
 
 void MEM() {
+    cout << "________________________MEM stage____________________" << endl;
     // 輸出至"result.txt"
     if (pipeline.INSCYCLE[3][0] != '0') {
         fstream out;
+        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
         out.open("result.txt", ios::out | ios::app);
+
         out << "    " << pipeline.INSCYCLE[3] << ":MEM ";
+
         out << pipeline.MEM_Branch << pipeline.MEM_Mem_Read << pipeline.MEM_Mem_Write << " " << pipeline.MEM_Reg_Write;
+
         if (pipeline.MEM_MemtoReg == 2) {
             out << 'X' << endl;
         }
@@ -45,7 +50,7 @@ void MEM() {
 
         for (int i = 0; i < 4; i++) {
             pipeline.INSCYCLE[4][i] = pipeline.INSCYCLE[3][i];
-            pipeline.INSCYCLE[3][i] = '0';
+            pipeline.INSCYCLE[3][i] = '0';//設為空
         }
         out.close();
     }
@@ -65,11 +70,14 @@ void MEM() {
 
     if (pipeline.prepre_forwarding == 1) {
         //判斷前前條指令是否forwarding
+        cout << "前前指令有forwarding(這裡就不用傳結果)" << endl;
     }
     else if (pipeline.sw_forwarding) {
         //判斷sw是否forwarding
+        cout << "sw前一個有forwarding(這裡就不用傳結果)" << endl;
     }
     else {
+        cout << "無forwarding 要傳結果" << endl;
         pipeline.bWB_rd = pipeline.bMEM_rd;
         pipeline.WB_rd = pipeline.MEM_rd;
         pipeline.MEM_Forward_result = pipeline.MEM_Result;
@@ -80,4 +88,5 @@ void MEM() {
     //MEM結束,換WB
     pipeline.STOP_MEM = true;
     pipeline.STOP_WB = false;
+    cout << "________________________MEM stage____________________" << endl;
 }

@@ -13,20 +13,29 @@ struct PipelineRegisters {
 
 	int line = 0;
 	//EX-------------------------------------------
-	int EX_RegDst, EX_ALUOp1, EX_ALUOp0, EX_ALUSrc;
-	int EX_Branch, EX_Mem_Read, EX_Mem_Write;
-	int EX_Reg_Write, EX_MemtoReg;
+	int EX_RegDst, EX_ALUOp1, EX_ALUOp0, EX_ALUSrc;//ex
+	int EX_Branch, EX_Mem_Read, EX_Mem_Write;//mem
+	int EX_Reg_Write, EX_MemtoReg;//wb
 	int rs, rt, rd, sign_extend;
+
+
+
 	//MEM-------------------------------------------
-	int MEM_Branch, MEM_Mem_Read, MEM_Mem_Write;
-	int MEM_Reg_Write, MEM_MemtoReg;
+	int MEM_Branch, MEM_Mem_Read, MEM_Mem_Write;//mem
+	int MEM_Reg_Write, MEM_MemtoReg;//wb
 	int MEM_Result, WriteData, Zero, MEM_Dest;
+
+
+
 	//WB-------------------------------------------
-	int WB_Reg_Write, WB_MemtoReg;
+	int WB_Reg_Write, WB_MemtoReg;//wb
 	int WB_Result, ReadData, WB_Dest;
 	int EX_rd, MEM_rd, WB_rd;
 	
 	int bEX_rd, bMEM_rd, bWB_rd;
+
+
+
 
 	string instruction; //指令
 	char INSCYCLE[5][4]; //儲存指令的陣列

@@ -7,6 +7,7 @@ using namespace std;
 fstream out;
 void writeResults() {
     // 寫結果到result.txt
+     //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
     out.open("result.txt", ios::out | ios::app);
     out << "需要花 " << pipeline.cycles << " 個cycles" << endl;
 
@@ -47,6 +48,7 @@ int main() {
     //while跑一輪就是一個cycle
     int temp = 0;
     fstream out;
+    //要清空文件，重新開始寫
     out.open("result.txt", ios::out);
     out.close();
 
@@ -62,7 +64,7 @@ int main() {
 
     while (true)
     {
-
+        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
         out.open("result.txt", ios::out | ios::app);
         out << "Cycle " << pipeline.cycles << endl;
         cout << "Cycle " << pipeline.cycles << endl;
