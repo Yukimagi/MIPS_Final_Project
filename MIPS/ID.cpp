@@ -130,11 +130,12 @@ void ins() {
 */
 void ID() {
     // stall判定,並且令stall期間的程式不會結束
-    if (pipeline.Stall_Count > 0) {
+    if (pipeline.Stall_Count > 0) {//stall 期間的輸出(有stall的話上一條指令會在輸出一次)
         pipeline.STOP_ID = false;
-        if (pipeline.INSCYCLE[1][0] != '0')//stall 期間的輸出(有stall的話上一條指令會在輸出一次)
+        if (pipeline.INSCYCLE[1][0] != '0')//空字符，表示終結前
         {
             fstream out;
+            //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
             out.open("result.txt", ios::out | ios::app);
             out << "	" << pipeline.INSCYCLE[1] << ":ID" << endl;
             out.close();

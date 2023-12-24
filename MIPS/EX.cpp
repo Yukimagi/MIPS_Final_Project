@@ -110,9 +110,11 @@ void SetEXStage() {
 void EX() {
 
     // 輸出至"result.txt"
-    if (pipeline.INSCYCLE[2][0] != '0') {
+    if (pipeline.INSCYCLE[2][0] != '0') {//非最後(空)
         fstream out;
+        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
         out.open("result.txt", ios::out | ios::app);
+
         out << "    " << pipeline.INSCYCLE[2] << ":EX ";
         if (pipeline.EX_RegDst == 2) {
             out << 'X';
@@ -120,16 +122,19 @@ void EX() {
         else {
             out << pipeline.EX_RegDst;
         }
+
         out << pipeline.EX_ALUSrc << " " << pipeline.EX_Branch << pipeline.EX_Mem_Read << pipeline.EX_Mem_Write << " " << pipeline.EX_Reg_Write;
+
         if (pipeline.EX_MemtoReg == 2) {
             out << 'X' << endl;
         }
         else {
             out << pipeline.EX_MemtoReg << endl;
         }
+
         for (int i = 0; i < 4; i++) {
             pipeline.INSCYCLE[3][i] = pipeline.INSCYCLE[2][i];
-            pipeline.INSCYCLE[2][i] = '0';
+            pipeline.INSCYCLE[2][i] = '0';//設為空
         }
         out.close();
     }
