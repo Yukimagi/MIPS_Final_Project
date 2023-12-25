@@ -19,7 +19,7 @@ using namespace std;
 void ReadInst(fstream& input) {
     string instemp = pipeline.instruction;
     bool nextline = false;// nextline 用來判斷本次讀取有沒有指令 有:PC+4 無:原PC
-    for (int i = 0; i <= pipeline.line; i++) {
+    for (int i = 0; i <= pipeline.line ; i++) {
 
         if (getline(input, pipeline.instruction)) {
 
@@ -27,22 +27,29 @@ void ReadInst(fstream& input) {
 
                 nextline = true;
 
-                for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 3; j++){
 
-                    pipeline.INSCYCLE[0][i] = pipeline.instruction[i];//傳個別指令進來
+                    pipeline.INSCYCLE[0][j] = pipeline.instruction[j];//傳個別指令進來
                 }
                 pipeline.INSCYCLE[0][3] = '\0';//設定空字符表示最後一個終結(以幫助後續判斷)
+
+
                 fstream out;
                 //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
                 out.open("result.txt", std::ios::out | std::ios::app);
-                out << "	" << pipeline.INSCYCLE[0] << ":IF" << std::endl;
+
+                out << "	" << pipeline.INSCYCLE[0] << ":IF\n";
+
                 out.close();
+
                 if (pipeline.Stall_Count > 0) {//如果有stall就不會傳新的指令進來(把自己的再輸出一次)
                     pipeline.STOP_ID = false;
                     pipeline.STOP_IF = false;
                     pipeline.instruction = instemp;
                     return;
                 }
+
+
                 for (int i = 0; i < 4; i++) {
                     pipeline.INSCYCLE[1][i] = pipeline.INSCYCLE[0][i]; //將當前指令傳送至 ID 階段 
                     pipeline.INSCYCLE[0][i] = '0';  //清空INSCYCLE[0][i] 準備接收下一條指令

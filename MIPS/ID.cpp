@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include<stdlib.h>
 using namespace std;
 void setEX(int rd, int alusrc, int b, int mr, int mw, int rw, int mtr);
 int GetRegValue_I(string instruction, int spaceIndex);
@@ -352,16 +353,15 @@ void setEX(int rd, int alusrc, int b, int mr, int mw, int rw, int mtr) {
 //c++字串轉數字的參考網站
 // https://shengyu7697.github.io/cpp-string-to-integer/
 //負責執行reg對reg時 I-format找暫存器
-int GetRegValue_I(string instruction, int spaceIndex) {
 
-    //3和2是判斷暫存器是十位數還是個位數(ex:16($2))
+int  GetRegValue_I(string instruction, int spaceIndex) {
     // 判斷暫存器是十位數還是個位數(ex:16($2))
     if (instruction[spaceIndex + 3] >= '0' && instruction[spaceIndex + 3] <= '9') {
         // rd找第一個值
-        return ((int)instruction[spaceIndex + 3] - '0') + ((int)instruction[spaceIndex + 2] - '0') * 10;
+        return atoi(instruction.substr(spaceIndex + 2, 2).c_str());
     }
     else if (instruction[spaceIndex + 2] >= '0' && instruction[spaceIndex + 2] <= '9') {
-        return ((int)instruction[spaceIndex + 2] - '0');
+        return atoi(instruction.substr(spaceIndex + 2, 1).c_str());
     }
     return -1;
 }
@@ -369,85 +369,85 @@ int GetRegValue_I(string instruction, int spaceIndex) {
 //負責執行reg對reg時 R-format找暫存器
 int GetRegValue_R(const std::string& instruction, int digit1, int digit2) {
     if (instruction[digit2] >= '0' && instruction[digit2] <= '9') {
-        return ((int)instruction[digit2] - '0') + ((int)instruction[digit1] - '0') * 10;
+        return atoi(instruction.substr(digit1, 2).c_str());
     }
     else if (instruction[digit1] >= '0' && instruction[digit1] <= '9') {
-        return ((int)instruction[digit1] - '0');
+        return atoi(instruction.substr(digit1, 1).c_str());
     }
     return -1;
 }
-//負責執行I-format找對應的位移
+
 void GetSE_I() {
     //因為需要抓memory中的暫存器做判斷，但我們主要是暴力解，讓他最多算兩位數，要記得/4(word)
     if (space[1] + 1 == '-') {//有負號的
-        if (pipeline.instruction[space[1] + 3] >= '0' && pipeline.instruction[space[1] + 3] <= '9') {
-            pipeline.sign_extend = -(((int)pipeline.instruction[space[1] + 3] - 48) + ((int)pipeline.instruction[space[1] + 2] - 48) * 10) / 4;
-            if (pipeline.instruction[space[1] + 6] >= '0' && pipeline.instruction[space[1] + 6] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 6] - '0') + ((int)pipeline.instruction[space[1] + 5] - '0') * 10;
+        if (isdigit(pipeline.instruction[space[1] + 3])) {
+            pipeline.sign_extend = -atoi(pipeline.instruction.substr(space[1] + 2, 2).c_str()) / 4;
+            if (isdigit(pipeline.instruction[space[1] + 6])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 5, 2).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
-            else if (pipeline.instruction[space[1] + 5] >= '0' && pipeline.instruction[space[1] + 5] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 5] - '0');
+            else if (isdigit(pipeline.instruction[space[1] + 5])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 4, 1).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
         }
-        else if (pipeline.instruction[space[1] + 2] >= '0' && pipeline.instruction[space[1] + 2] <= '9') {
-            pipeline.sign_extend = -(((int)pipeline.instruction[space[1] + 2] - '0')) / 4;
-            if (pipeline.instruction[space[1] + 5] >= '0' && pipeline.instruction[space[1] + 5] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 5] - '0') + ((int)pipeline.instruction[space[1] + 4] - '0') * 10;
+        else if (isdigit(pipeline.instruction[space[1] + 2])) {
+            pipeline.sign_extend = -atoi(pipeline.instruction.substr(space[1] + 2, 1).c_str()) / 4;
+            if (isdigit(pipeline.instruction[space[1] + 5])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 4, 2).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
-            else if (pipeline.instruction[space[1] + 4] >= '0' && pipeline.instruction[space[1] + 4] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 4] - '0');
+            else if (isdigit(pipeline.instruction[space[1] + 4])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 4, 1).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
         }
     }
     else {//沒負號的
-        if (pipeline.instruction[space[1] + 2] >= '0' && pipeline.instruction[space[1] + 2] <= '9') {
+        if (isdigit(pipeline.instruction[space[1] + 2])) {
             //要執行的位移/4
-            pipeline.sign_extend = (((int)pipeline.instruction[space[1] + 2] - '0') + ((int)pipeline.instruction[space[1] + 1] - '0') * 10) / 4;
-            if (pipeline.instruction[space[1] + 6] >= 48 && pipeline.instruction[space[1] + 6] <= '9') {
+            pipeline.sign_extend = atoi(pipeline.instruction.substr(space[1] + 1, 2).c_str()) / 4;
+            if (isdigit(pipeline.instruction[space[1] + 6])) {
                 //Memory 中的暫存器的名字
-                hoc_rs = ((int)pipeline.instruction[space[1] + 6] - '0') + ((int)pipeline.instruction[space[1] + 5] - '0') * 10;
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 5, 2).c_str());
                 //Memory 中的暫存器的實際的值
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
-            else if (pipeline.instruction[space[1] + 5] >= '0' && pipeline.instruction[space[1] + 5] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 5] - '0');
+            else if (isdigit(pipeline.instruction[space[1] + 5])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 5, 1).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
         }
-        else if (pipeline.instruction[space[1] + 1] >= '0' && pipeline.instruction[space[1] + 1] <= '9') {
-            pipeline.sign_extend = (((int)pipeline.instruction[space[1] + 1] - '0')) / 4;
-            if (pipeline.instruction[space[1] + 5] >= '0' && pipeline.instruction[space[1] + 5] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 5] - '0') + ((int)pipeline.instruction[space[1] + 4] - '0') * 10;
+        else if (isdigit(pipeline.instruction[space[1] + 1])) {
+            pipeline.sign_extend = atoi(pipeline.instruction.substr(space[1] + 1, 1).c_str()) / 4;
+            if (isdigit(pipeline.instruction[space[1] + 5])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 4, 2).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
-            else if (pipeline.instruction[space[1] + 4] >= '0' && pipeline.instruction[space[1] + 4] <= '9') {
-                hoc_rs = ((int)pipeline.instruction[space[1] + 4] - '0');
+            else if (isdigit(pipeline.instruction[space[1] + 4])) {
+                hoc_rs = atoi(pipeline.instruction.substr(space[1] + 4, 1).c_str());
                 pipeline.rs = pipeline.reg[hoc_rs];
             }
         }
     }
 }
-//負責執行R-format找rd並做取正負判斷
+
 void GetSE_R() {
     // find rt 分為正負 add 取正  sub 取負
     if (pipeline.instruction[0] == 'a') {
         if (pipeline.instruction[space[2] + 1] == '$') {
-            if (pipeline.instruction[space[2] + 3] >= '0' && pipeline.instruction[space[2] + 3] <= '9') {
+            if (isdigit(pipeline.instruction[space[2] + 3])) {
                 //找第三個(暫存器的名字)
-                hoc_rt = ((int)pipeline.instruction[space[2] + 3] - '0') + ((int)pipeline.instruction[space[2] + 2] - '0') * 10;
+                hoc_rt = atoi(pipeline.instruction.substr(space[2] + 2, 2).c_str());
                 //找第三個(暫存器的對應的值)
                 pipeline.rt = pipeline.reg[hoc_rt];
             }
-            else if (pipeline.instruction[space[2] + 2] >= 48 && pipeline.instruction[space[2] + 2] <= '9') {
-                hoc_rt = ((int)pipeline.instruction[space[2] + 2] - '0');
+            else if (isdigit(pipeline.instruction[space[2] + 2])) {
+                hoc_rt = atoi(pipeline.instruction.substr(space[2] + 2, 1).c_str());
                 pipeline.rt = pipeline.reg[hoc_rt];
             }
         }
-        else {// find rt=最後的常數
+        else { // find rt=最後的常數
             //判斷add最後一個指令是不是常數
             int temp = 1;
             pipeline.rt = 0;
@@ -455,14 +455,14 @@ void GetSE_R() {
                 for (int i = pipeline.instruction.length() - 1; i > space[2] + 1; i--) {
                     //存對應的數字 hoc_rt會存到前一個指令 所以這裡設為-1
                     hoc_rt = -1;
-                    pipeline.rt += ((int)pipeline.instruction[i] - '0') * temp;
+                    pipeline.rt += (pipeline.instruction[i] - '0') * temp;
                 }
                 pipeline.rt = -pipeline.rt;
             }
             else {
                 for (int i = pipeline.instruction.length() - 1; i > space[2]; i--) {
                     hoc_rt = -1;
-                    pipeline.rt += ((int)pipeline.instruction[i] - '0') * temp;
+                    pipeline.rt += (pipeline.instruction[i] - '0') * temp;
                 }
             }
         }
@@ -470,28 +470,28 @@ void GetSE_R() {
     //同上面add(這裡是)sub
     else if (pipeline.instruction[0] == 's') {
         if (pipeline.instruction[space[2] + 1] == '$') {
-            if (pipeline.instruction[space[2] + 3] >= '0' && pipeline.instruction[space[2] + 3] <= '9') {
-                hoc_rt = ((int)pipeline.instruction[space[2] + 3] - '0') + ((int)pipeline.instruction[space[2] + 2] - '0') * 10;
+            if (isdigit(pipeline.instruction[space[2] + 3])) {
+                hoc_rt = atoi(pipeline.instruction.substr(space[2] + 2, 2).c_str());
                 pipeline.rt = -pipeline.reg[hoc_rt];
             }
-            else if (pipeline.instruction[space[2] + 2] >= 48 && pipeline.instruction[space[2] + 2] <= '9') {
-                hoc_rt = ((int)pipeline.instruction[space[2] + 2] - '0');
+            else if (isdigit(pipeline.instruction[space[2] + 2])) {
+                hoc_rt = atoi(pipeline.instruction.substr(space[2] + 2, 1).c_str());
                 pipeline.rt = -pipeline.reg[hoc_rt];
             }
         }
-        else {// find rt=最後的常數
+        else { // find rt=最後的常數
             int temp = 1;
             pipeline.rt = 0;
             if (space[2] + 1 == '-') {
                 for (int i = pipeline.instruction.length() - 1; i > space[2] + 1; i--) {
                     hoc_rt = -1;
-                    pipeline.rt += ((int)pipeline.instruction[i] - '0') * temp;
+                    pipeline.rt += (pipeline.instruction[i] - '0') * temp;
                 }
             }
             else {
                 for (int i = pipeline.instruction.length() - 1; i > space[2]; i--) {
                     hoc_rt = -1;
-                    pipeline.rt += ((int)pipeline.instruction[i] - '0') * temp;
+                    pipeline.rt += (pipeline.instruction[i] - '0') * temp;
                 }
                 pipeline.rt = -pipeline.rt;
             }

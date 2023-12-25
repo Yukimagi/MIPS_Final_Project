@@ -37,15 +37,12 @@ void MEM() {
         //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
         out.open("result.txt", ios::out | ios::app);
 
-        out << "    " << pipeline.INSCYCLE[3] << ":MEM ";
-
-        out << pipeline.MEM_Branch << pipeline.MEM_Mem_Read << pipeline.MEM_Mem_Write << " " << pipeline.MEM_Reg_Write;
+        out << "    " << pipeline.INSCYCLE[3] << ":MEM "<< pipeline.MEM_Branch << pipeline.MEM_Mem_Read << pipeline.MEM_Mem_Write << " " << pipeline.MEM_Reg_Write;
 
         if (pipeline.MEM_MemtoReg == 2) {
-            out << 'X' << endl;
-        }
-        else {
-            out << pipeline.MEM_MemtoReg << endl;
+            out << 'X' << '\n';
+        }else {
+            out << pipeline.MEM_MemtoReg << '\n';
         }
 
         for (int i = 0; i < 4; i++) {

@@ -18,31 +18,7 @@ void SetWBStage() {
     pipeline.WB_MemtoReg = 0;
 }
 
-void WB() {
-    cout << "________________________WB stage START____________________" << endl;
-    // 輸出至"result.txt"
-    if (pipeline.INSCYCLE[4][0] != '0') {
-        fstream out;
-        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
-        out.open("result.txt", ios::out | ios::app);
-
-        out << "    " << pipeline.INSCYCLE[4] << ":WB ";
-
-        out << pipeline.WB_Reg_Write;
-
-        if (pipeline.WB_MemtoReg == 2) {
-            out << 'X' << endl;
-        }
-        else {
-            out << pipeline.WB_MemtoReg << endl;
-        }
-
-        for (int i = 0; i < 4; i++) {
-            pipeline.INSCYCLE[4][i] = '0';//設為空
-        }
-        out.close();
-    }
-
+void WriteB(){
     // 根據WB_Reg_Write決定是否將資料寫回register
     if (pipeline.WB_Reg_Write == 1) { // WB_Reg_Write == 1 寫入
         if (pipeline.WB_MemtoReg == 1) {
@@ -55,8 +31,34 @@ void WB() {
             cout << "Reg[" << pipeline.WB_Dest << "]=" << pipeline.WB_Result << endl;
         }
     }
+}
 
-    void SetWBStage();
+void WB() {
+    cout << "________________________WB stage START____________________" << endl;
+    // 輸出至"result.txt"
+    if (pipeline.INSCYCLE[4][0] != '0') {
+        fstream out;
+        //要在文件後繼續寫out.open("result.txt", ios::out | ios::app);此方法ios::out | ios::app
+        out.open("result.txt", ios::out | ios::app);
+
+        out << "    " << pipeline.INSCYCLE[4] << ":WB "<< pipeline.WB_Reg_Write;
+
+        if (pipeline.WB_MemtoReg == 2) {
+            out << 'X' << '\n';
+        }
+        else {
+            out << pipeline.WB_MemtoReg << '\n';
+        }
+
+        for (int i = 0; i < 4; i++) {
+            pipeline.INSCYCLE[4][i] = '0';//設為空
+        }
+        out.close();
+    }
+
+    WriteB();
+
+    SetWBStage();
 
     //WB結束
     pipeline.STOP_WB = true;
