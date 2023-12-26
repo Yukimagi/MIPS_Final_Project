@@ -64,21 +64,22 @@ void MEM() {
     }
 
     passtoWB();
-
+    //mem hazard(if ex hazard isn't true) or(branch中前前前一個指令的目的地暫存器要branch(p.115))
     if (pipeline.prepre_forwarding == 1) {
         //判斷前前條指令是否forwarding
-        cout << "前前指令有forwarding(這裡就不用傳結果)" << endl;
+        cout << "ex/mem有forwarding(這裡就不用傳結果)" << endl;//有用ex傳
     }
     else if (pipeline.sw_forwarding) {
         //判斷sw是否forwarding
         cout << "sw前一個有forwarding(這裡就不用傳結果)" << endl;
     }
-    else {
-        cout << "無forwarding 要傳結果" << endl;
+    else {//lw要做forwarding給ex、mem hazard(if ex hazard isn't true) or(branch中前前前一個指令的目的地暫存器要branch)
+        cout << "mem/wb要傳結果(取指令愈近愈好)" << endl;
         pipeline.bWB_rd = pipeline.bMEM_rd;
         pipeline.WB_rd = pipeline.MEM_rd;
         pipeline.MEM_Forward_result = pipeline.MEM_Result;
     }
+
 
     SetMEMStage();
 
