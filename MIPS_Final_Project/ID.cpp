@@ -25,7 +25,7 @@ int hoc_rs, hoc_rt, hoc_rd;
 */
 void ins() {
     // 我們是以sw、lw為I-Format則它會有2個空格，但如果是branch、add、sub則會有3個空格(所以輸入memory.txt需要注意格式，不然會做錯)
-    if (format == 2) {//I-format
+    if (format == 2) {//I-format(2個空格)
         if (pipeline.instruction[0] == 'l') {//lw
             setEX(0, 1, 0, 1, 0, 1, 1);
             job = 1;
@@ -42,7 +42,7 @@ void ins() {
         }
         GetSE_I();
     }
-    else if (format == 3) {//R-format(賦值ex)
+    else if (format == 3) {//R-format(賦值ex)(3個空格)
         if (pipeline.instruction[0] == 'a') {
             setEX(1, 0, 0, 0, 0, 1, 0);
             job = 3;
