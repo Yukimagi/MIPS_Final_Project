@@ -12,6 +12,11 @@ using namespace std;
 最後設置 STOP_EX STOP_MEM 狀態
 */
 
+/*
+* 要處裡運算，這裡會有各種forwarding情況下(之前都會去設定flag)需要額外執行的運算(賦值)
+*/
+
+
 void process() {
     if (pipeline.EX_ALUSrc == 0) // R-format
     {
@@ -57,7 +62,12 @@ void process() {
     {
         pipeline.MEM_Result = pipeline.rs + pipeline.sign_extend;
         if (pipeline.sw_forwarding) {
-            if (pipeline.EX_Forward_rt) pipeline.rt = pipeline.EX_Forward_rd;
+            if (pipeline.MEM_Forward_rt) {//要執行rt的forward
+                pipeline.rt = pipeline.MEM_Forward_result;//rt抓forward值(MEM_Forward_result->前一個結果)
+                cout << "A\n";
+                pipeline.MEM_Forward_rt = 0;
+            }
+            else if (pipeline.EX_Forward_rt) pipeline.rt = pipeline.EX_Forward_rd;
             pipeline.MEM_Result = pipeline.rs + pipeline.sign_extend;
         }
         if (!pipeline.bforwarding) {

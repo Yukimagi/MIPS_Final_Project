@@ -16,6 +16,16 @@ using namespace std;
 最後設置 STOP_IF STOP_ID 狀態
 */
 
+/*
+補充:
+1.在IF階段的目的就是fetch instruction，因此把指令取出
+2.重點是要判斷有無stall的情況，就像是branch中的predict not taken，
+需要先直接執行下一指令的if階段，直到branch說明是下一指令繼續或跳。
+3.將指令傳送至下一階段(ID)
+4.最後設置 STOP_IF STOP_ID 狀態
+*/
+
+
 void ReadInst(fstream& input) {
     string instemp = pipeline.instruction;
     bool nextline = false;// nextline 用來判斷本次讀取有沒有指令 有:PC+4 無:原PC

@@ -14,6 +14,37 @@ int format;
 int space[3];
 int job;
 int hoc_rs, hoc_rt, hoc_rd;
+
+/*
+* 補充統整:
+1.lw(主要判斷stall)->拿現在的暫存器之rs有沒有和前一條的暫存器的rd相等且是lw
+(相等則stall->2次(一次是IF要取值，一次是mem存取記憶體)
+，並先歸零opcode，最後還是會被賦值)
+
+2.sw有兩種可能:
+a.前一個是r-format或lw則要做forwarding(forward給ex)
+
+a-1.如果遇到lw則要stall一次，並將要做forward的值做紀錄
+
+a-2.如果遇到r-format則將要做forward的值做紀錄
+
+b.判斷前前條指令(這裡是因為我們發現如果我們的sw在前前條指令如果有相同的時候，會有，沒有先抓過來的情形，因此我們多執行這個階段讓他可以先計算於ex)
+
+
+3.r-format:
+情形如同(類似)sw。
+
+4.branch:
+如果前一條是lw->stall 2次
+並做branch的forwarding(flag=1)
+
+如果前一條是r-format則stall 1次
+
+另外判斷branch的跳躍，我們改到ID才不會判斷太慢(這是依照ppt的說法)
+
+*/
+
+
 /*
 * 這裡是針對指令進行處哩，並賦值
 * 主要的方法是夠過空白來判斷格式
@@ -129,6 +160,9 @@ void ins() {
 * 而data hazrd中如果不用stall，就直接做forwarding，這邊會簡單的紀錄一下
 * 其他詳細步驟請看以下
 */
+
+
+
 void ID() {
     // stall判定,並且令stall期間的程式不會結束
     if (pipeline.Stall_Count > 0) {//stall 期間的輸出(有stall的話上一條指令會在輸出一次)
@@ -169,7 +203,7 @@ void ID() {
         //hoc_rs->抓到目前的rs
         hoc_rs = hoc_rs + pipeline.sign_extend;//Memory要計算
 
-        //拿現在的暫存器有沒有和前一條的暫存器相等
+        //拿現在的暫存器有沒有和前一條的暫存器相等，而且是lw
         //MEM_Dest上一個的rd，和目前的rs是否相等(相等則stall->2次，先歸零，最後還是會被賦值)
         if (pipeline.MEM_Dest == hoc_rs && pipeline.MEM_Reg_Write == 1) {
             pipeline.Stall_Count = 2;
@@ -180,7 +214,7 @@ void ID() {
         // rs存原本位置
         pipeline.rs = hoc_rs;
         //rt直接對應暫存器不用計算
-        //MEM_Dest上一個的rd，和目前的rt是否相等(相等則stall->2次，先歸零，最後還是會被賦值)
+        //MEM_Dest上一個的rd，和目前的rt是否相等(相等則stall->1次，先歸零，最後還是會被賦值)
         if (pipeline.MEM_Dest == hoc_rt && pipeline.MEM_Reg_Write == 1) {
             pipeline.sw_forwarding = 1;//要forwarding(讓它在ex拿到)
             if (pipeline.MEM_Mem_Read == 1) {//上一個是不是lw(lw之MemRead == 1)是的話要stall
@@ -202,6 +236,21 @@ void ID() {
                 }
                 if (pipeline.MEM_Dest == hoc_rt) {//實際抓給ex的值只有rt的值
                     pipeline.EX_Forward_rt = 1;
+                }
+            }
+        }
+        //判斷前前條指令(一樣的概念)<sw>
+        if ((pipeline.WB_rd == hoc_rt) && pipeline.MEM_Reg_Write == 1 && pipeline.WB_rd != pipeline.MEM_Dest) {
+            pipeline.sw_forwarding = 1;//要forwarding(讓它在ex拿到)
+            if (pipeline.MEM_Mem_Read == 1) {
+                setEX(0, 0, 0, 0, 0, 0, 0);
+            }
+            else {
+                pipeline.prepre_forwarding = 1;
+                pipeline.forwarding = 1;
+
+                if (pipeline.WB_rd == hoc_rt) {
+                    pipeline.MEM_Forward_rt = 1;
                 }
             }
         }
