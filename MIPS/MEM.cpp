@@ -13,6 +13,12 @@ MEM_Mem_Write 判斷要不要將register的內容傳給memory
 最後設置 STOP_MEM STOP_WB 狀態
 */
 
+/*
+* 補充，除了上述的傳值外，需要注意:
+* lw要做forwarding給ex、mem hazard(if ex hazard isn't true) 
+  or(branch中前前前一個指令的目的地暫存器要branch)
+*/
+
 void passtoWB() {
     // 將MEM階段沒有用到的bit傳送至WB階段
     pipeline.WB_Reg_Write = pipeline.MEM_Reg_Write;
